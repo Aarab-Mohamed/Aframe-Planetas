@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="./dist/aframe-particle-system-component.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      border-radius: 15px;
+      box-shadow: 5px 5px 5px white;
+      top: 50%;
+      left: calc(50% + 50px);
+      transform: translate(-30%, -50%);
+      font: normal 500 1.2rem/1.2 Inconsolata, Andale Mono, Courier New, monospace;
+      color: greenyellow;
+      padding: 10px 20px;
+      background-color: transparent;
+      border: 1px solid #ccc;
+      z-index: 1000;
+      width: 60%;
+      max-height: 90%;
+      overflow: auto;
+    }
+
+    .modal-header {
+      background-color: transparent;
+      color: white;
+      text-align: center;
+    }
+
+    h4 {
+      margin: 10px 0px;
+    }
+
+    .modal-body {
+      padding: 10px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: space-evenly;
+      background-color: transparent;
+      color: rgb(182, 162, 162);
+      text-align: center;
+      margin: 10px 0;
+      visibility: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  
+  <audio id="audioPlayer" autoplay>
+    <source src="./audio/presentacion.mp3" type="audio/mp3">
+  </audio>
+
+  <a-scene cursor="rayOrigin: mouse">
+    <a-sky position="0 0 0" particle-system="preset: dust; particleCount: 5000"></a-sky>
+    <a-sky color="#000"></a-sky>
+    <a-entity id="Avatar-Moha" position="-6 -1 -6" scale="150 200 150"
+      animation="property: rotation; to: 20 360 20; loop: true; dur: 40000" play-all-model-animations=""
+      gltf-model="https://cdn.glitch.me/6903e30e-6840-4477-b169-010c06a93a4b/nomad_robot.glb?v=1706747794247"
+      alt="Avatar-Moha" 
+   </a-entity>
+  </a-scene>
+
+  <div id="myModal" class="modal">
+    <div class="modal-header">
+      <h4>Información sobre los planetas</h4>
+    </div>
+    <div class="modal-body">
+      <div id="textoModal"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="close" style="cursor: pointer;" onclick="cerrarModal()">
+        <span>Salir</span>
+      </button>
+      <button class="verPlanetas" style="cursor: pointer;" onclick="window.open('mostrarPlanetas.html', '_blank')">Ver
+        planetas</button>
+    </div>
+  </div>
+
+  <script>
+    function abrirModal() {
+      var modal = document.getElementById('myModal');
+      var textoModal = document.getElementById('textoModal');
+      var footerButtons = document.querySelector('.modal-footer');
+      var textoCompleto = "Hola mundo. Soy el avatar de Mohamed Aarab, estoy aquí para presentarles mi mini proyecto, que crea una representación visualmente atractiva, para representar el sistema solar con algunos planetas con Html, en un entorno de realidad virtual, con una escena 3D, utilizando el framework A-Frame. En el mini proyecto, se ve un sistema de estrellas, para mejorar la visualización del espacio, y darle un  aspecto realista. Los planetas se representan en la escena, con modelos GLTF, en 3D con animación. Cada planeta,, tiene una animación de rotación y una posición específica en la escena. Al hacer clic en él, se muestra la información sobre el planeta en un modal. La posición de los planetas se actualiza, en función del tiempo, para simular la rotación alrededor del sol. Si quieres verlos haz clic sobre ver planetas. Gracias por vuesta atencion, y espero que os guste mi mini proyecto.";
+
+      textoModal.textContent = "";
+      modal.style.display = 'block';
+      mostrarTextoLetraPorLetra(textoCompleto, textoModal, footerButtons);
+      var audio = document.getElementById('audioPlayer');
+      if (audio.paused) {
+        audio.play();
+      }
+    }
+
+    function mostrarTextoLetraPorLetra(texto, elemento, botones) {
+      var index = 0;
+      var intervalo = setInterval(function () {
+        if (index < texto.length) {
+          elemento.textContent += texto.charAt(index);
+          index++;
+        } else {
+          clearInterval(intervalo);
+          botones.style.visibility = 'visible';
+        }
+      }, 60);
+    }
+
+    function cerrarModal() {
+      var modal = document.getElementById('myModal');
+      modal.style.display = 'none';
+    }
+
+    window.onload = abrirModal;
+  </script>
+</body>
+</html>
